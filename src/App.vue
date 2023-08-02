@@ -1,18 +1,37 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
-</template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { StreamBarcodeReader } from "vue-barcode-reader";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    StreamBarcodeReader,
+  },
+  data: () => ({
+    result: "",
+  }),
+
+  methods: {
+    onDecode(decoded) {
+      console.log(decoded);
+      this.result = decoded;
+    },
+    onLoaded() {
+      console.log("Barcode reader loaded.");
+    },
+  },
+};
 </script>
+
+<template>
+  <div v-if="!result">
+    <StreamBarcodeReader @decode="onDecode" @loaded="onLoaded">
+    </StreamBarcodeReader>
+  </div>
+  <div v-else>
+    <h1>VIN : {{ result }}</h1>
+    <button @click="result = ''">Reset</button>
+  </div>
+</template>
 
 <style>
 #app {
